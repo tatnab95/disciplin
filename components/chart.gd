@@ -65,7 +65,7 @@ func _draw() -> void:
 		var bar_w := maxf(2.0, slot * 0.6 / series.size())
 		for i in n:
 			for si in series.size():
-				var s := series[si]
+				var s: Dictionary = series[si]
 				var v := clampf(float(s["values"][i]), 0.0, max_v)
 				var bh := area.size.y * (v / max_v)
 				var x := area.position.x + i * slot + slot * 0.2 + si * bar_w

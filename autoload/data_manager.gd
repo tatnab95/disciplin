@@ -470,7 +470,7 @@ func _ensure_structures() -> void:
 	for sec in SECTIONS:
 		if not data.has(sec) or not (data[sec] is Array):
 			data[sec] = []
-	var s := data["settings"]
+	var s: Dictionary = data["settings"]
 	if not s.has("lang"):
 		s["lang"] = "ru"
 	if not s.has("vision_api_key"):

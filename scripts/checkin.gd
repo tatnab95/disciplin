@@ -107,7 +107,7 @@ func _title(text: String) -> Label:
 func _update_label(f: Dictionary, v: float) -> void:
 	var val := int(round(v))
 	var emojis: Dictionary = f["emojis"]
-	var emoji := emojis["mid"]
+	var emoji: String = emojis["mid"]
 	if val >= 8:
 		emoji = emojis["high"]
 	elif val <= 3:

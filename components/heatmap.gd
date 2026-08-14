@@ -28,7 +28,7 @@ func _draw() -> void:
 		var row := i % rows
 		var pos := Vector2(col * (cell + gap), row * (cell + gap))
 		var ratio := clampf(values[i], 0.0, 1.0)
-		var color := _colors[0]
+		var color: Color = _colors[0]
 		if ratio > 0.0:
 			color = _colors[clampi(int(ceil(ratio * 4.0)), 0, 4)]
 		draw_rect(Rect2(pos, Vector2(cell, cell)), color)
