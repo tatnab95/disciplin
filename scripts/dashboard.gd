@@ -29,6 +29,7 @@ const REC_STYLE := {
 var _score_ring: Node
 var _score_total_label: Label
 var _parts_label: Label
+var _assistant_label: Label
 var _rec_box: VBoxContainer
 var _schedule_label: Label
 var _progress_box: VBoxContainer
@@ -54,6 +55,7 @@ func _process(_delta: float) -> void:
 
 
 func _build_all() -> void:
+	content.add_child(_assistant_card())
 	content.add_child(_hero_card())
 	content.add_child(_timers_card())
 	content.add_child(_progress_card())
@@ -84,6 +86,32 @@ func _title(text: String) -> Label:
 	l.add_theme_font_size_override("font_size", 18)
 	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
+
+
+func _assistant_card() -> PanelContainer:
+	var arr := _make_card()
+	var card: PanelContainer = arr[0]
+	var vb: VBoxContainer = arr[1]
+	content.add_child(card)
+
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 12)
+
+	var icon := Label.new()
+	icon.text = "🤖"
+	icon.add_theme_font_size_override("font_size", 22)
+	icon.add_theme_color_override("font_color", ThemeManager.accent)
+	hbox.add_child(icon)
+
+	var l := Label.new()
+	l.text = Recommender.daily_message()
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.add_child(l)
+	_assistant_label = l
+
+	vb.add_child(hbox)
+	return card
 
 
 func _hero_card() -> PanelContainer:
@@ -177,6 +205,8 @@ func _focus_card() -> PanelContainer:
 func _refresh() -> void:
 	var today := TimeManager.today_str()
 	date_label.text = "%s · %s" % [tr("today"), TimeManager.format_date_short(today)]
+	if _assistant_label:
+		_assistant_label.text = Recommender.daily_message()
 
 	var res := Recommender.compute_today_score()
 	var total: int = res["total"]

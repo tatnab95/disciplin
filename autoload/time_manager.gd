@@ -16,6 +16,11 @@ func now_hhmm() -> String:
 	return "%02d:%02d" % [int(d["hour"]), int(d["minute"])]
 
 
+func current_hour() -> int:
+	var d := Time.get_time_dict_from_system()
+	return int(d["hour"])
+
+
 func time_to_minutes(hhmm: String) -> int:
 	var parts := hhmm.split(":")
 	if parts.size() < 2:

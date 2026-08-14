@@ -60,6 +60,68 @@ func get_recommendations() -> Array[Dictionary]:
 	return out.slice(0, MAX_RECS)
 
 
+func daily_message() -> String:
+	var today := TimeManager.today_str()
+	var s := DataManager.day_summary(today)
+	var settings := DataManager.get_settings()
+	var game_limit := int(settings.get("game_limit_minutes", 120))
+	var sleep_target := float(settings.get("sleep_target_hours", 8.0))
+	var hour := TimeManager.current_hour()
+
+	var greeting := "Привет!"
+	if hour < 5:
+		greeting = "Доброй ночи!"
+	elif hour < 12:
+		greeting = "Доброе утро!"
+	elif hour < 18:
+		greeting = "Добрый день!"
+	else:
+		greeting = "Добрый вечер!"
+
+	if not s.has_checkin:
+		return "%s Как себя чувствуешь сегодня? Не забудь сделать чек-ин ⚡" % greeting
+
+	if s.game_min >= game_limit:
+		return _pick([
+			"Ты сегодня много играешь — %s. Сделай паузу и разомнись 💪" % TimeManager.format_duration(s.game_min),
+			"%s Игра — это весело, но %s уже перебор. Отдохни от экрана 😉" % [greeting, TimeManager.format_duration(s.game_min)],
+		])
+
+	if s.fatigue >= 7:
+		return "Ты сильно устал сегодня. Поставь отдых на первое место ☕"
+
+	var last_sport := -1
+	for i in range(4):
+		if DataManager.day_summary(TimeManager.add_days(today, -i)).sport_min > 0:
+			last_sport = i
+			break
+	if s.sport_min == 0 and (last_sport == -1 or last_sport >= 2):
+		return "Давненько не было спорта! Лёгкая разминка на 15 минут вернёт бодрость 🏋️"
+
+	if s.has_sleep and s.sleep_hours < sleep_target - 0.5:
+		return "Ты спал только %.1f ч — сегодня постарайся лечь пораньше 😴" % s.sleep_hours
+
+	if s.habits_total > 0 and s.habits_done == s.habits_total:
+		return _pick([
+			"Все привычки выполнены — идеальный день! 🔥",
+			"Ты закрыл все привычки дня, красавчик! 👏",
+		])
+
+	if s.protein < 60.0:
+		return "Мало белка за день. Добавь что-нибудь вкусное к ужину 🍗"
+
+	return _pick([
+		"%s Ты молодец, продолжай в том же духе 🌟" % greeting,
+		"Каждый день — шаг к лучшей версии себя 🚀",
+		"%s Не забывай отдыхать и радоваться мелочам 🌈" % greeting,
+		"Ты справляешься лучше, чем думаешь 💛",
+	])
+
+
+func _pick(messages: Array[String]) -> String:
+	return messages[randi() % messages.size()]
+
+
 func compute_today_score() -> Dictionary:
 	var today := TimeManager.today_str()
 	var s := DataManager.day_summary(today)
