@@ -2,7 +2,7 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: disciplin 0.1.0\n"
+"Project-Id-Version: disciplin 0.2.0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -512,4 +512,4 @@ msgid "settings_about"
 msgstr "О приложении"
 
 msgid "about_text"
-msgstr "Disciplin v0.1.0 · открытый код (MIT) · все данные хранятся локально на устройстве"
+msgstr "Disciplin v0.2.0 · открытый код (MIT) · все данные хранятся локально на устройстве"

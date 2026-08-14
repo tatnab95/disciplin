@@ -21,7 +21,7 @@ const SECTIONS := [
 func _ready() -> void:
 	title_label.text = tr("app_title")
 	subtitle_label.text = tr("app_subtitle")
-	version_label.text = tr("menu_version").format({"v": "0.1.0"})
+	version_label.text = tr("menu_version").format({"v": "0.2.0"})
 	for s in SECTIONS:
 		var btn := Button.new()
 		btn.text = tr(s[1])
