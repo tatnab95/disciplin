@@ -13,7 +13,11 @@ var _list_box: VBoxContainer
 
 
 func _ready() -> void:
-	$Bg.color = ThemeManager.bg
+	$Bg.visible = false
+	var bg := preload("res://components/background.gd").new()
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(bg)
+	move_child(bg, 0)
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_habits")
 	DataManager.data_changed.connect(_refresh)
@@ -35,10 +39,10 @@ func _build() -> void:
 func _make_card() -> Array:
 	var card := PanelContainer.new()
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_bottom", 14)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 10)
 	margin.add_child(vb)
@@ -49,7 +53,7 @@ func _make_card() -> Array:
 func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", 20)
+	l.add_theme_font_size_override("font_size", 18)
 	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 

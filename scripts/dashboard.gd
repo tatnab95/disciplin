@@ -36,7 +36,11 @@ var _timer_buttons: Dictionary = {}
 
 
 func _ready() -> void:
-	$Bg.color = ThemeManager.bg
+	$Bg.visible = false
+	var bg := preload("res://components/background.gd").new()
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(bg)
+	move_child(bg, 0)
 	DataManager.data_changed.connect(_refresh)
 	menu_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	_build_all()
@@ -63,10 +67,10 @@ func _build_all() -> void:
 func _make_card() -> Array:
 	var card := PanelContainer.new()
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_bottom", 14)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 10)
 	margin.add_child(vb)
@@ -77,7 +81,7 @@ func _make_card() -> Array:
 func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
-	l.add_theme_font_size_override("font_size", 20)
+	l.add_theme_font_size_override("font_size", 18)
 	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
@@ -92,7 +96,7 @@ func _hero_card() -> PanelContainer:
 	hbox.add_theme_constant_override("separation", 16)
 
 	var ring := ScoreRing.new()
-	ring.custom_minimum_size = Vector2(104, 104)
+	ring.custom_minimum_size = Vector2(88, 88)
 	hbox.add_child(ring)
 	_score_ring = ring
 
@@ -106,7 +110,7 @@ func _hero_card() -> PanelContainer:
 	col.add_child(caption)
 
 	_score_total_label = Label.new()
-	_score_total_label.add_theme_font_size_override("font_size", 34)
+	_score_total_label.add_theme_font_size_override("font_size", 30)
 	col.add_child(_score_total_label)
 
 	_parts_label = Label.new()
@@ -127,14 +131,14 @@ func _timers_card() -> PanelContainer:
 
 	vb.add_child(_title(tr("activity_timers")))
 	var grid := GridContainer.new()
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 10)
-	grid.add_theme_constant_override("v_separation", 10)
+	grid.columns = 1
+	grid.add_theme_constant_override("v_separation", 8)
 	for type in ACTIVITIES:
 		var meta: Dictionary = ACTIVITIES[type]
 		var b := Button.new()
 		b.toggle_mode = true
-		b.custom_minimum_size = Vector2(0, 64)
+		b.custom_minimum_size = Vector2(0, 56)
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.text = _timer_text(type)
 		b.pressed.connect(_on_timer_pressed.bind(type))
 		grid.add_child(b)

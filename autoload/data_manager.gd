@@ -424,7 +424,7 @@ func _default_data() -> Dictionary:
 		"version": DATA_VERSION,
 		"settings": {
 			"lang": "ru",
-			"theme": "dark",
+			"theme": "light",
 			"accent": "blue",
 			"vision_api_key": "",
 			"vision_base_url": "https://api.openai.com/v1",
@@ -476,7 +476,7 @@ func _ensure_structures() -> void:
 	if not s.has("lang"):
 		s["lang"] = "ru"
 	if not s.has("theme"):
-		s["theme"] = "dark"
+		s["theme"] = "light"
 	if not s.has("accent"):
 		s["accent"] = "blue"
 	if not s.has("vision_api_key"):

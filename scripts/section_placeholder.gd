@@ -6,8 +6,7 @@ extends Control
 
 
 func _ready() -> void:
-	var bg := ColorRect.new()
-	bg.color = ThemeManager.bg
+	var bg := preload("res://components/background.gd").new()
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 

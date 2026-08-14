@@ -1,28 +1,36 @@
 extends Node
 
-## Динамическая тема приложения.
-## Тёмная/светлая основа + акцентный цвет (синий / зелёный / серый).
-## Применяется ко всему дереву через root.theme и сигнал theme_changed.
+## Тема в стиле Material You / Android 16: светлая «стеклянная» основа,
+## полупрозрачные карточки со скруглением и тенью, градиентный фон
+## с цветными пятнами. Тёмная версия — тот же стиль, тёмные тона.
 
 signal theme_changed
 
 const ACCENT_COLORS := {
 	"blue": Color(0.23, 0.51, 0.96),
-	"green": Color(0.2, 0.72, 0.46),
-	"gray": Color(0.42, 0.47, 0.55),
+	"green": Color(0.22, 0.69, 0.47),
+	"gray": Color(0.44, 0.48, 0.56),
 }
 
-var dark := true
+var dark := false
 var accent_name := "blue"
 var accent := Color(0.23, 0.51, 0.96)
-var accent_soft := Color(0.23, 0.51, 0.96, 0.15)
-var bg := Color(0.043, 0.051, 0.071)
-var bg_soft := Color(0.055, 0.065, 0.09)
-var card := Color(1, 1, 1, 0.045)
-var border := Color(1, 1, 1, 0.09)
-var text := Color("e8ecf2")
-var text_secondary := Color("9aa6b2")
-var danger := Color("f87171")
+var accent_soft := Color(0.23, 0.51, 0.96, 0.14)
+var bg_top := Color(0.945, 0.958, 0.985)
+var bg_bottom := Color(0.99, 0.965, 0.975)
+var bg := Color(0.955, 0.962, 0.975)
+var bg_soft := Color(1, 1, 1)
+var card := Color(1, 1, 1, 0.55)
+var card_border := Color(1, 1, 1, 0.75)
+var border := Color(0.15, 0.18, 0.25, 0.06)
+var input := Color(1, 1, 1, 0.7)
+var text := Color("1d2126")
+var text_secondary := Color(0.30, 0.35, 0.42, 0.9)
+var danger := Color("e5484d")
+var shadow := Color(0.4, 0.5, 0.65, 0.16)
+var blob2 := Color(0.62, 0.45, 0.93, 0.12)
+var blob3 := Color(0.99, 0.60, 0.40, 0.10)
+var blob4 := Color(0.38, 0.80, 0.68, 0.12)
 
 
 func _ready() -> void:
@@ -34,25 +42,45 @@ func apply() -> void:
 
 
 func _apply() -> void:
-	var theme_str: String = str(DataManager.get_setting("theme", "dark"))
+	var theme_str: String = str(DataManager.get_setting("theme", "light"))
 	dark = theme_str == "dark"
 	accent_name = str(DataManager.get_setting("accent", "blue"))
 	accent = ACCENT_COLORS.get(accent_name, ACCENT_COLORS["blue"])
-	accent_soft = Color(accent, 0.15)
+	accent_soft = Color(accent, 0.14)
 	if dark:
-		bg = Color(0.043, 0.051, 0.071)
-		bg_soft = Color(0.055, 0.065, 0.09)
-		card = Color(1, 1, 1, 0.045)
+		bg_top = Color(0.055, 0.06, 0.085)
+		bg_bottom = Color(0.075, 0.08, 0.12)
+		bg = Color(0.06, 0.065, 0.095)
+		bg_soft = Color(0.10, 0.11, 0.15)
+		card = Color(1, 1, 1, 0.07)
+		card_border = Color(1, 1, 1, 0.12)
 		border = Color(1, 1, 1, 0.09)
-		text = Color("e8ecf2")
-		text_secondary = Color("9aa6b2")
+		input = Color(1, 1, 1, 0.06)
+		text = Color("eceef1")
+		text_secondary = Color("a3abb5")
+		danger = Color("f87171")
+		shadow = Color(0, 0, 0, 0.45)
+		accent_soft = Color(accent, 0.16)
+		blob2 = Color(0.62, 0.45, 0.93, 0.10)
+		blob3 = Color(0.99, 0.60, 0.40, 0.07)
+		blob4 = Color(0.38, 0.80, 0.68, 0.08)
 	else:
-		bg = Color(0.941, 0.953, 0.965)
-		bg_soft = Color(0.98, 0.985, 0.99)
-		card = Color(1, 1, 1, 0.6)
-		border = Color(0, 0, 0, 0.07)
-		text = Color("14181d")
-		text_secondary = Color(0.12, 0.13, 0.15, 0.58)
+		bg_top = Color(0.945, 0.958, 0.985)
+		bg_bottom = Color(0.99, 0.965, 0.975)
+		bg = Color(0.955, 0.962, 0.975)
+		bg_soft = Color(1, 1, 1)
+		card = Color(1, 1, 1, 0.55)
+		card_border = Color(1, 1, 1, 0.75)
+		border = Color(0.15, 0.18, 0.25, 0.06)
+		input = Color(1, 1, 1, 0.7)
+		text = Color("1d2126")
+		text_secondary = Color(0.30, 0.35, 0.42, 0.9)
+		danger = Color("e5484d")
+		shadow = Color(0.4, 0.5, 0.65, 0.16)
+		accent_soft = Color(accent, 0.14)
+		blob2 = Color(0.62, 0.45, 0.93, 0.12)
+		blob3 = Color(0.99, 0.60, 0.40, 0.10)
+		blob4 = Color(0.38, 0.80, 0.68, 0.12)
 	RenderingServer.set_default_clear_color(bg)
 	get_tree().root.theme = _build_theme()
 	theme_changed.emit()
@@ -60,54 +88,47 @@ func _apply() -> void:
 
 func _build_theme() -> Theme:
 	var t := Theme.new()
-	t.default_font_size = 17
+	t.default_font_size = 16
 
-	# Цвета текста
+	# Текст
 	t.set_color("font_color", "Label", text)
 	t.set_color("font_color", "Button", text)
 	t.set_color("font_hover_color", "Button", text)
-	t.set_color("font_pressed_color", "Button", text)
+	t.set_color("font_pressed_color", "Button", accent)
 	t.set_color("font_focus_color", "Button", text)
 	t.set_color("font_disabled_color", "Button", Color(text, 0.35))
 	t.set_color("font_color", "LineEdit", text)
 	t.set_color("font_placeholder_color", "LineEdit", Color(text, 0.4))
 	t.set_color("caret_color", "LineEdit", accent)
 	t.set_color("font_color", "OptionButton", text)
-	t.set_color("font_hover_color", "OptionButton", text)
+	t.set_color("font_hover_color", "OptionButton", accent)
 	t.set_color("font_color", "PopupMenu", text)
-	t.set_color("font_hover_color", "PopupMenu", accent)
+	t.set_color("font_hover_color", "PopupMenu", text)
+	t.set_color("font_selected_color", "PopupMenu", text)
 	t.set_color("title_color", "Window", text)
 
-	# Панели/карточки
-	t.set_stylebox("panel", "PanelContainer", _sb(card, border, 16, 0))
-	t.set_stylebox("panel", "Panel", _sb(card, border, 16, 0))
+	# Карточки (стекло)
+	var card_sb := _sb(card, card_border, 24, 0, 14)
+	card_sb.shadow_offset = Vector2(0, 6)
+	t.set_stylebox("panel", "PanelContainer", card_sb)
+	t.set_stylebox("panel", "Panel", card_sb)
 
 	# Кнопки
-	var btn_normal := _sb(Color(text, 0.05), Color(0, 0, 0, 0), 12, 12)
-	var btn_hover := _sb(Color(text, 0.09), Color(0, 0, 0, 0), 12, 12)
-	var btn_pressed := _sb(Color(text, 0.12), Color(0, 0, 0, 0), 12, 12)
-	var btn_focus := _sb(Color(text, 0.06), accent, 12, 12)
-	var btn_disabled := _sb(Color(text, 0.03), Color(0, 0, 0, 0), 12, 12)
-	t.set_stylebox("normal", "Button", btn_normal)
-	t.set_stylebox("hover", "Button", btn_hover)
-	t.set_stylebox("pressed", "Button", btn_pressed)
-	t.set_stylebox("focus", "Button", btn_focus)
-	t.set_stylebox("disabled", "Button", btn_disabled)
-	for sb_name in ["normal", "hover", "pressed", "focus", "disabled"]:
-		var box := btn_normal
-		if sb_name == "hover":
-			box = btn_hover
-		elif sb_name == "pressed":
-			box = btn_pressed
-		elif sb_name == "focus":
-			box = btn_focus
-		elif sb_name == "disabled":
-			box = btn_disabled
-		t.set_stylebox(sb_name, "OptionButton", box)
+	t.set_stylebox("normal", "Button", _sb(Color(text, 0.06), Color(text, 0.04), 18, 12, 6))
+	t.set_stylebox("hover", "Button", _sb(Color(text, 0.10), Color(text, 0.05), 18, 12, 6))
+	t.set_stylebox("pressed", "Button", _sb(Color(text, 0.14), Color(text, 0.06), 18, 12, 4))
+	t.set_stylebox("focus", "Button", _sb(Color(text, 0.06), accent, 18, 12, 6))
+	t.set_stylebox("disabled", "Button", _sb(Color(text, 0.03), Color(0, 0, 0, 0), 18, 12, 0))
+	t.set_stylebox("normal", "OptionButton", _sb(Color(text, 0.06), Color(text, 0.04), 18, 12, 6))
+	t.set_stylebox("hover", "OptionButton", _sb(Color(text, 0.10), Color(text, 0.05), 18, 12, 6))
+	t.set_stylebox("pressed", "OptionButton", _sb(Color(text, 0.14), Color(text, 0.06), 18, 12, 4))
+	t.set_stylebox("focus", "OptionButton", _sb(Color(text, 0.06), accent, 18, 12, 6))
+	t.set_stylebox("disabled", "OptionButton", _sb(Color(text, 0.03), Color(0, 0, 0, 0), 18, 12, 0))
 
-	# Поле ввода
-	t.set_stylebox("normal", "LineEdit", _sb(Color(text, 0.04), border, 10, 12))
-	t.set_stylebox("focus", "LineEdit", _sb(Color(text, 0.04), accent, 10, 12))
+	# Поля ввода
+	t.set_stylebox("normal", "LineEdit", _sb(input, border, 14, 12, 2))
+	t.set_stylebox("focus", "LineEdit", _sb(Color(input, 1.0), accent, 14, 12, 2))
+	t.set_stylebox("read_only", "LineEdit", _sb(Color(input, 0.6), border, 14, 12, 0))
 
 	# Ползунки
 	t.set_stylebox("slider", "Slider", _track_sb())
@@ -117,46 +138,65 @@ func _build_theme() -> Theme:
 	t.set_stylebox("grabber_highlight", "Slider", _grabber_sb())
 
 	# Прогресс-бары
-	t.set_stylebox("background", "ProgressBar", _sb(Color(text, 0.08), Color(0, 0, 0, 0), 6, 0))
-	t.set_stylebox("fill", "ProgressBar", _sb(accent, Color(0, 0, 0, 0), 6, 0))
+	t.set_stylebox("background", "ProgressBar", _bar_bg_sb())
+	t.set_stylebox("fill", "ProgressBar", _bar_fill_sb())
 
 	# Выпадающее меню
-	t.set_stylebox("panel", "PopupMenu", _sb(bg_soft, border, 12, 8))
-	t.set_stylebox("hover", "PopupMenu", _sb(accent_soft, Color(0, 0, 0, 0), 8, 8))
-	t.set_stylebox("separator", "PopupMenu", _sb(border, Color(0, 0, 0, 0), 2, 0))
+	t.set_stylebox("panel", "PopupMenu", _sb(Color(bg_soft, 0.96), border, 18, 8, 18))
+	t.set_stylebox("hover", "PopupMenu", _sb(accent_soft, Color(0, 0, 0, 0), 12, 8, 0))
+	t.set_stylebox("separator", "PopupMenu", _sb(border, Color(0, 0, 0, 0), 2, 0, 0))
 
 	# Скроллбар
-	t.set_stylebox("grabber", "ScrollBar", _sb(Color(text, 0.22), Color(0, 0, 0, 0), 4, 2))
-	t.set_stylebox("grabber_highlight", "ScrollBar", _sb(Color(text, 0.3), Color(0, 0, 0, 0), 4, 2))
+	t.set_stylebox("grabber", "ScrollBar", _sb(Color(text, 0.28), Color(0, 0, 0, 0), 5, 2, 0))
+	t.set_stylebox("grabber_highlight", "ScrollBar", _sb(Color(text, 0.36), Color(0, 0, 0, 0), 5, 2, 0))
 
-	# Окна (диалоги)
-	t.set_stylebox("panel", "Window", _sb(bg_soft, border, 18, 0))
+	# Окна и диалоги
+	var win := _sb(Color(bg_soft, 0.98), border, 24, 0, 22)
+	win.shadow_offset = Vector2(0, 10)
+	t.set_stylebox("panel", "Window", win)
 	return t
 
 
-func _sb(bg_color: Color, border_color: Color, radius: int, margins: int) -> StyleBoxFlat:
+func _sb(bg_color: Color, border_color: Color, radius: int, margins: int, shadow_size: int) -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = bg_color
 	sb.border_color = border_color
 	sb.set_border_width_all(1 if border_color.a > 0.0 else 0)
 	sb.set_corner_radius_all(radius)
 	sb.set_content_margin_all(margins)
+	if shadow_size > 0:
+		sb.shadow_color = shadow
+		sb.shadow_size = shadow_size
+		sb.shadow_offset = Vector2(0, 3)
 	return sb
 
 
 func _track_sb() -> StyleBoxFlat:
-	var sb := _sb(Color(text, 0.1), Color(0, 0, 0, 0), 6, 0)
-	sb.set_content_margin(SIDE_TOP, 4)
-	sb.set_content_margin(SIDE_BOTTOM, 4)
+	var sb := _sb(Color(text, 0.14), Color(0, 0, 0, 0), 5, 0, 0)
+	sb.set_content_margin(SIDE_TOP, 3)
+	sb.set_content_margin(SIDE_BOTTOM, 3)
 	return sb
 
 
 func _track_hl_sb() -> StyleBoxFlat:
-	var sb := _sb(accent_soft, Color(0, 0, 0, 0), 6, 0)
-	sb.set_content_margin(SIDE_TOP, 4)
-	sb.set_content_margin(SIDE_BOTTOM, 4)
+	var sb := _sb(Color(accent, 0.30), Color(0, 0, 0, 0), 5, 0, 0)
+	sb.set_content_margin(SIDE_TOP, 3)
+	sb.set_content_margin(SIDE_BOTTOM, 3)
 	return sb
 
 
 func _grabber_sb() -> StyleBoxFlat:
-	return _sb(accent, Color(0, 0, 0, 0), 8, 8)
+	return _sb(accent, Color(1, 1, 1, 0.5), 10, 10, 8)
+
+
+func _bar_bg_sb() -> StyleBoxFlat:
+	var sb := _sb(Color(text, 0.10), Color(0, 0, 0, 0), 8, 0, 0)
+	sb.set_content_margin(SIDE_TOP, 3)
+	sb.set_content_margin(SIDE_BOTTOM, 3)
+	return sb
+
+
+func _bar_fill_sb() -> StyleBoxFlat:
+	var sb := _sb(accent, Color(1, 1, 1, 0.4), 8, 0, 4)
+	sb.shadow_offset = Vector2(0, 1)
+	return sb
