@@ -1,0 +1,215 @@
+# Disciplin — Russian translations.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: disciplin 0.1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "app_title"
+msgstr "Дисциплина"
+
+msgid "app_subtitle"
+msgstr "Привычки · сон · спорт · еда"
+
+msgid "menu_version"
+msgstr "v%s · открытый код (MIT)"
+
+msgid "menu_dashboard"
+msgstr "Сегодня"
+
+msgid "menu_habits"
+msgstr "Привычки"
+
+msgid "menu_planner"
+msgstr "Расписание"
+
+msgid "menu_sleep"
+msgstr "Сон"
+
+msgid "menu_checkin"
+msgstr "Чек-ин"
+
+msgid "menu_food"
+msgstr "Еда"
+
+msgid "menu_sport"
+msgstr "Спорт"
+
+msgid "menu_stats"
+msgstr "Статистика"
+
+msgid "menu_settings"
+msgstr "Настройки"
+
+msgid "back"
+msgstr "← Назад"
+
+msgid "coming_soon"
+msgstr "Раздел в разработке"
+
+msgid "today"
+msgstr "Сегодня"
+
+msgid "save"
+msgstr "Сохранить"
+
+msgid "cancel"
+msgstr "Отмена"
+
+msgid "delete"
+msgstr "Удалить"
+
+msgid "add"
+msgstr "Добавить"
+
+msgid "edit"
+msgstr "Изменить"
+
+msgid "close"
+msgstr "Закрыть"
+
+msgid "yes"
+msgstr "Да"
+
+msgid "no"
+msgstr "Нет"
+
+msgid "h_unit"
+msgstr "ч"
+
+msgid "min_unit"
+msgstr "мин"
+
+msgid "month_names"
+msgstr "янв,фев,мар,апр,май,июн,июл,авг,сен,окт,ноя,дек"
+
+msgid "habit_water"
+msgstr "Выпить воду"
+
+msgid "habit_breakfast"
+msgstr "Позавтракать"
+
+msgid "habit_sport"
+msgstr "Тренировка"
+
+msgid "habit_books"
+msgstr "Почитать"
+
+msgid "habit_no_games_morning"
+msgstr "Без игр утром"
+
+msgid "habit_vitamins"
+msgstr "Витамины"
+
+msgid "schedule_wake"
+msgstr "Подъём"
+
+msgid "schedule_breakfast"
+msgstr "Завтрак"
+
+msgid "schedule_work"
+msgstr "Работа/учёба"
+
+msgid "schedule_lunch"
+msgstr "Обед"
+
+msgid "schedule_sport"
+msgstr "Тренировка"
+
+msgid "schedule_dinner"
+msgstr "Ужин"
+
+msgid "schedule_rest"
+msgstr "Отдых"
+
+msgid "schedule_sleep"
+msgstr "Сон"
+
+msgid "activity_game"
+msgstr "Игры"
+
+msgid "activity_sport"
+msgstr "Спорт"
+
+msgid "activity_study"
+msgstr "Учёба"
+
+msgid "activity_work"
+msgstr "Работа"
+
+msgid "activity_rest"
+msgstr "Отдых"
+
+msgid "meal_breakfast"
+msgstr "Завтрак"
+
+msgid "meal_lunch"
+msgstr "Обед"
+
+msgid "meal_dinner"
+msgstr "Ужин"
+
+msgid "meal_snack"
+msgstr "Перекус"
+
+msgid "meal_other"
+msgstr "Другое"
+
+msgid "category_protein"
+msgstr "Белок"
+
+msgid "category_veg"
+msgstr "Овощи"
+
+msgid "category_carbs"
+msgstr "Углеводы"
+
+msgid "category_fruit"
+msgstr "Фрукты"
+
+msgid "category_dairy"
+msgstr "Молочное"
+
+msgid "category_fat"
+msgstr "Жиры"
+
+msgid "category_sweets"
+msgstr "Сладости"
+
+msgid "category_drink"
+msgstr "Напитки"
+
+msgid "category_other"
+msgstr "Другое"
+
+msgid "score"
+msgstr "Балл дня"
+
+msgid "recommendations"
+msgstr "Рекомендации"
+
+msgid "rec_checkin"
+msgstr "Сделай утренний чек-ин: энергия, усталость, настроение."
+
+msgid "rec_sleep_short"
+msgstr "Ты спишь меньше нормы. Попробуй лечь на {v} раньше."
+
+msgid "rec_rest"
+msgstr "Усталость высокая. Устрой перерыв 15–20 минут."
+
+msgid "rec_too_much_game"
+msgstr "Игр сегодня уже {v}. Замени следующую сессию на тренировку или прогулку."
+
+msgid "rec_sport"
+msgstr "Спорта не было {v} дня. Запланируй тренировку."
+
+msgid "rec_protein"
+msgstr "Белка сегодня мало ({v} г). Добавь курицу, рыбу, яйца или творог."
+
+msgid "rec_log_food"
+msgstr "Отметь, что ты ел сегодня, — это поможет с рекомендациями по питанию."
+
+msgid "h_duration_min"
+msgstr "{m} мин"

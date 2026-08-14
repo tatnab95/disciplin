@@ -10,18 +10,34 @@ config_version=5
 
 [application]
 
-config/name="disciplin"
+config/name="Disciplin"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+DataManager="*res://autoload/data_manager.gd"
+TimeManager="*res://autoload/time_manager.gd"
+ActivityTracker="*res://autoload/activity_tracker.gd"
+Recommender="*res://autoload/recommender.gd"
+FoodRecognizer="*res://autoload/food_recognizer.gd"
+
 [display]
 
+window/size/viewport_width=480
+window/size/viewport_height=800
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=1
 
-[physics]
+[gui]
 
-3d/physics_engine="Jolt Physics"
+theme/custom="res://assets/theme.tres"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://localization/ru.po")
 
 [rendering]
 

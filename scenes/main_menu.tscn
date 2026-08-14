@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Bg" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0705882, 0.0784314, 0.0901961, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(420, 0)
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="Center/VBox"]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(0.901961, 0.929412, 0.952941, 1)
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Center/VBox"]
+unique_name_in_owner = true
+theme_override_colors/font_color = Color(0.545098, 0.580392, 0.619608, 1)
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/VBox"]
+custom_minimum_size = Vector2(0, 12)
+
+[node name="Grid" type="GridContainer" parent="Center/VBox"]
+unique_name_in_owner = true
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="VersionLabel" type="Label" parent="Center/VBox"]
+unique_name_in_owner = true
+theme_override_colors/font_color = Color(0.545098, 0.580392, 0.619608, 1)
+horizontal_alignment = 1
