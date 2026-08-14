@@ -16,9 +16,9 @@ func get_recommendations() -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
 	var today := TimeManager.today_str()
 	var s := DataManager.day_summary(today)
-	var set := DataManager.get_settings()
-	var sleep_target: float = float(set.get("sleep_target_hours", 8.0))
-	var game_limit: int = int(set.get("game_limit_minutes", 120))
+	var user_settings := DataManager.get_settings()
+	var sleep_target: float = float(user_settings.get("sleep_target_hours", 8.0))
+	var game_limit: int = int(user_settings.get("game_limit_minutes", 120))
 
 	if not s.has_checkin:
 		out.append(_rec(90, "rec_checkin", "checkin"))
@@ -63,7 +63,7 @@ func get_recommendations() -> Array[Dictionary]:
 func compute_today_score() -> Dictionary:
 	var today := TimeManager.today_str()
 	var s := DataManager.day_summary(today)
-	var set := DataManager.get_settings()
+	var user_settings := DataManager.get_settings()
 	var parts := {}
 	var total := 0.0
 	var weights := 0.0
@@ -82,7 +82,7 @@ func compute_today_score() -> Dictionary:
 	weights += 15.0
 
 	if s.has_sleep:
-		var ratio := clampf(s.sleep_hours / sleep_target_avg(set), 0.0, 1.0)
+		var ratio := clampf(s.sleep_hours / sleep_target_avg(user_settings), 0.0, 1.0)
 		var sp := 100.0 * ratio
 		parts["sleep"] = sp
 		total += 20.0 * ratio
@@ -105,7 +105,7 @@ func compute_today_score() -> Dictionary:
 		parts["sport"] = 0.0
 	weights += 20.0
 
-	var game_limit := float(set.get("game_limit_minutes", 120))
+	var game_limit := float(user_settings.get("game_limit_minutes", 120))
 	var game_ratio := clampf(float(s.game_min) / game_limit, 0.0, 2.0)
 	var gs := 0.0
 	if game_ratio <= 1.0:
@@ -129,5 +129,5 @@ func _rec(priority: int, text_key: String, category: String, args: Dictionary = 
 	return {"priority": priority, "text": text, "key": text_key, "category": category}
 
 
-func sleep_target_avg(set: Dictionary) -> float:
-	return float(set.get("sleep_target_hours", 8.0))
+func sleep_target_avg(settings: Dictionary) -> float:
+	return float(settings.get("sleep_target_hours", 8.0))

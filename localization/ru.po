@@ -213,3 +213,303 @@ msgstr "Отметь, что ты ел сегодня, — это поможет
 
 msgid "h_duration_min"
 msgstr "{m} мин"
+
+msgid "now_doing"
+msgstr "Сейчас"
+
+msgid "next_up"
+msgstr "Дальше: {name} в {time}"
+
+msgid "free_time"
+msgstr "Сейчас свободное время"
+
+msgid "activity_timers"
+msgstr "Таймеры"
+
+msgid "today_progress"
+msgstr "Прогресс дня"
+
+msgid "no_recommendations"
+msgstr "Отличная работа! Пока всё в норме."
+
+msgid "progress_sleep"
+msgstr "Сон"
+
+msgid "progress_habits"
+msgstr "Привычки"
+
+msgid "progress_food"
+msgstr "Белок"
+
+msgid "progress_sport"
+msgstr "Спорт"
+
+msgid "progress_game"
+msgstr "Игры"
+
+msgid "g_unit"
+msgstr "г"
+
+msgid "heatmap_title"
+msgstr "Последние 35 дней"
+
+msgid "add_habit"
+msgstr "Добавить привычку"
+
+msgid "habit_name"
+msgstr "Название привычки"
+
+msgid "habit_icon"
+msgstr "Иконка (эмодзи)"
+
+msgid "sleep_bedtime"
+msgstr "Отбой"
+
+msgid "sleep_wake"
+msgstr "Подъём"
+
+msgid "sleep_quality"
+msgstr "Качество сна"
+
+msgid "sleep_hours_label"
+msgstr "Сон: {v} ч"
+
+msgid "sleep_debt"
+msgstr "Недосып: {v} ч"
+
+msgid "sleep_ok"
+msgstr "Высыпаешься 👍"
+
+msgid "sleep_hint"
+msgstr "Введи время сна и качество, чтобы видеть статистику."
+
+msgid "week_avg_title"
+msgstr "Средняя за 7 дней"
+
+msgid "week_avg"
+msgstr "Средняя за 7 дней: {v} ч"
+
+msgid "no_data"
+msgstr "Нет данных"
+
+msgid "invalid_time"
+msgstr "Введи время в формате ЧЧ:ММ"
+
+msgid "time_placeholder"
+msgstr "ЧЧ:ММ"
+
+msgid "checkin_hint"
+msgstr "Оцени состояние от 1 до 10. Делай это утром — точнее данные для рекомендаций."
+
+msgid "checkin_energy"
+msgstr "Энергия"
+
+msgid "checkin_fatigue"
+msgstr "Усталость"
+
+msgid "checkin_mood"
+msgstr "Адекватность / настроение"
+
+msgid "sport_type"
+msgstr "Тип"
+
+msgid "sport_duration"
+msgstr "Длительность (мин)"
+
+msgid "sport_note"
+msgstr "Заметка"
+
+msgid "sport_note_placeholder"
+msgstr "например: 5x5, 80 кг"
+
+msgid "train_strength"
+msgstr "Силовая"
+
+msgid "train_cardio"
+msgstr "Кардио"
+
+msgid "train_flex"
+msgstr "Растяжка"
+
+msgid "train_other"
+msgstr "Другое"
+
+msgid "sport_goal"
+msgstr "Цель недели"
+
+msgid "sport_goal_text"
+msgstr "Тренировки: {sessions}/{target_sessions} · Минуты: {minutes}/{target_minutes}"
+
+msgid "sport_history"
+msgstr "История"
+
+msgid "add_meal"
+msgstr "Добавить приём пищи"
+
+msgid "meal_type"
+msgstr "Приём пищи"
+
+msgid "meal_photo"
+msgstr "📷 Фото"
+
+msgid "meal_hint"
+msgstr "Фото определит еду через ИИ (ключ в настройках). Без ключа — добавь продукты вручную."
+
+msgid "meal_items"
+msgstr "Продукты в приёме"
+
+msgid "save_meal"
+msgstr "Сохранить приём"
+
+msgid "meal_search"
+msgstr "Поиск продукта"
+
+msgid "meal_search_placeholder"
+msgstr "Например: курица, рис, банан"
+
+msgid "meal_empty"
+msgstr "Добавь хотя бы один продукт."
+
+msgid "meal_saved"
+msgstr "Приём пищи сохранён ✅"
+
+msgid "today_meals"
+msgstr "Сегодня"
+
+msgid "meal_totals"
+msgstr "Итого: {kcal} ккал · Б {protein} г · Ж {fat} г · У {carbs} г"
+
+msgid "photo_error"
+msgstr "Не удалось прочитать фото."
+
+msgid "ai_thinking"
+msgstr "Анализирую фото…"
+
+msgid "ai_no_key"
+msgstr "Нет API-ключа. Добавь его в настройках или введи еду вручную."
+
+msgid "ai_network"
+msgstr "Ошибка сети при распознавании."
+
+msgid "ai_error_unknown"
+msgstr "Не удалось распознать еду."
+
+msgid "ai_no_food"
+msgstr "На фото не найдена еда."
+
+msgid "ai_done"
+msgstr "Распознано: {n} продукта(ов)"
+
+msgid "days_7"
+msgstr "7 дней"
+
+msgid "days_30"
+msgstr "30 дней"
+
+msgid "chart_sleep"
+msgstr "Сон (ч)"
+
+msgid "chart_mood"
+msgstr "Энергия и настроение (1–10)"
+
+msgid "chart_energy"
+msgstr "Энергия"
+
+msgid "chart_mood_label"
+msgstr "Настроение"
+
+msgid "chart_activity"
+msgstr "Игры vs Спорт (мин)"
+
+msgid "chart_game"
+msgstr "Игры"
+
+msgid "chart_sport"
+msgstr "Спорт"
+
+msgid "chart_calories"
+msgstr "Калории (ккал)"
+
+msgid "schedule_add"
+msgstr "Добавить слот"
+
+msgid "schedule_time"
+msgstr "Время"
+
+msgid "schedule_name"
+msgstr "Занятие"
+
+msgid "schedule_duration"
+msgstr "Минуты"
+
+msgid "schedule_now_badge"
+msgstr "● сейчас"
+
+msgid "settings_lang"
+msgstr "Язык"
+
+msgid "settings_ai"
+msgstr "ИИ-распознавание еды (необязательно)"
+
+msgid "settings_api_key"
+msgstr "API-ключ"
+
+msgid "settings_base_url"
+msgstr "Base URL"
+
+msgid "settings_model"
+msgstr "Модель"
+
+msgid "settings_goals"
+msgstr "Цели"
+
+msgid "settings_sleep_target"
+msgstr "Цель сна (ч)"
+
+msgid "settings_game_limit"
+msgstr "Лимит игр (мин/день)"
+
+msgid "settings_sport_sessions"
+msgstr "Тренировок в неделю"
+
+msgid "settings_sport_minutes"
+msgstr "Минут спорта в неделю"
+
+msgid "settings_water"
+msgstr "Вода (мл/день)"
+
+msgid "settings_data"
+msgstr "Данные"
+
+msgid "settings_export"
+msgstr "Экспорт данных (JSON)"
+
+msgid "settings_import"
+msgstr "Импорт данных (JSON)"
+
+msgid "settings_reset"
+msgstr "Сбросить все данные"
+
+msgid "settings_saved"
+msgstr "Настройки сохранены ✅"
+
+msgid "settings_exported"
+msgstr "Экспортировано: {path}"
+
+msgid "settings_imported"
+msgstr "Импортировано ✅"
+
+msgid "settings_reset_confirm"
+msgstr "Точно удалить все данные? Это действие необратимо."
+
+msgid "settings_reset_done"
+msgstr "Данные сброшены."
+
+msgid "settings_error"
+msgstr "Ошибка. Проверь файл и попробуй снова."
+
+msgid "settings_about"
+msgstr "О приложении"
+
+msgid "about_text"
+msgstr "Disciplin v0.1.0 · открытый код (MIT) · все данные хранятся локально на устройстве"

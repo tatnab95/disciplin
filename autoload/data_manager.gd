@@ -377,6 +377,14 @@ func import_from_path(path: String) -> bool:
 	return true
 
 
+func reset_data() -> void:
+	if FileAccess.file_exists(DATA_PATH):
+		DirAccess.remove_absolute(DATA_PATH)
+	data = _default_data()
+	_ensure_structures()
+	save_data()
+
+
 # ---------------------------------------------------------------------------
 # Каталог продуктов
 # ---------------------------------------------------------------------------

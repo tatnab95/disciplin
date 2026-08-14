@@ -33,8 +33,11 @@ func recognize_image(path: String, on_done: Callable) -> void:
 		on_done.call({"ok": false, "error": "cant_read_image"})
 		return
 	if img.get_width() > 1024 or img.get_height() > 1024:
+		var scale := minf(1024.0 / img.get_width(), 1024.0 / img.get_height())
+		var new_w := int(round(img.get_width() * scale))
+		var new_h := int(round(img.get_height() * scale))
 		img = img.duplicate()
-		img.resize(1024, 1024, Image.INTERPOLATE_LANCZOS)
+		img.resize(new_w, new_h, Image.INTERPOLATE_LANCZOS)
 	var b64 := Marshalls.raw_to_base64(img.save_jpg_to_buffer(0.85))
 	var payload := {
 		"model": str(DataManager.get_setting("vision_model", "gpt-4o-mini")),
