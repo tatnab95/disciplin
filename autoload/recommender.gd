@@ -69,7 +69,7 @@ func compute_today_score() -> Dictionary:
 	var weights := 0.0
 
 	if s.habits_total > 0:
-		var h := 100.0 * s.habits_done / s.habits_total
+		var h: float = 100.0 * s.habits_done / s.habits_total
 		parts["habits"] = h
 		total += 25.0 * h / 100.0
 		weights += 25.0

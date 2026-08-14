@@ -402,7 +402,7 @@ func _today_row(meal: Dictionary) -> HBoxContainer:
 	var line1 := Label.new()
 	line1.text = "%s · %s" % [tr(meta["name_key"]), str(meal.get("time", ""))]
 	info.add_child(line1)
-	var item_names: Array = []
+	var item_names := PackedStringArray()
 	var meal_kcal := 0
 	for it in meal.get("items", []):
 		if it is Dictionary:

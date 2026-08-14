@@ -103,7 +103,7 @@ func _build_charts() -> void:
 	var sleep_values: Array = []
 	var sleep_sum := 0.0
 	for d in days:
-		var h := DataManager.day_summary(d).sleep_hours
+		var h: float = DataManager.day_summary(d).sleep_hours
 		sleep_values.append(h)
 		sleep_sum += h
 	_charts_box.add_child(_chart_card(

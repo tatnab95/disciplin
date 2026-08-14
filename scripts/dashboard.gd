@@ -227,7 +227,7 @@ func _refresh() -> void:
 	if _score_total_label:
 		_score_total_label.text = "%s: %d/100" % [tr("score"), total]
 	if _parts_label:
-		var lines: Array[String] = []
+		var lines := PackedStringArray()
 		if parts.has("sleep"):
 			lines.append("😴 %d" % int(parts["sleep"]))
 		if parts.has("sport"):

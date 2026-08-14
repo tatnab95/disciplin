@@ -167,8 +167,9 @@ func _update_summary() -> void:
 	var target := float(user_settings.get("sleep_target_hours", 8.0))
 
 	if s.has_sleep and s.sleep_hours > 0:
-		var lines := [tr("sleep_hours_label").format({"v": "%.1f" % s.sleep_hours})]
-		var debt := target - s.sleep_hours
+		var lines := PackedStringArray()
+		lines.append(tr("sleep_hours_label").format({"v": "%.1f" % s.sleep_hours}))
+		var debt: float = target - s.sleep_hours
 		if debt > 0.5:
 			lines.append(tr("sleep_debt").format({"v": "%.1f" % debt}))
 		else:
