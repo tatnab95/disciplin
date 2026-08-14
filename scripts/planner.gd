@@ -11,6 +11,7 @@ var _editing_id := ""
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_planner")
 	DataManager.data_changed.connect(_refresh)
@@ -63,7 +64,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -75,7 +76,7 @@ func _refresh() -> void:
 	if slots.is_empty():
 		var l := Label.new()
 		l.text = tr("no_data")
-		l.add_theme_color_override("font_color", Color("8b949e"))
+		l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 		_list_box.add_child(l)
 		return
 	var current_id := ""
@@ -103,13 +104,13 @@ func _slot_row(slot: Dictionary, is_current: bool) -> HBoxContainer:
 	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if is_current:
-		name.add_theme_color_override("font_color", Color("4cc38a"))
+		name.add_theme_color_override("font_color", ThemeManager.accent)
 	h.add_child(name)
 
 	if is_current:
 		var badge := Label.new()
 		badge.text = tr("schedule_now_badge")
-		badge.add_theme_color_override("font_color", Color("4cc38a"))
+		badge.add_theme_color_override("font_color", ThemeManager.accent)
 		h.add_child(badge)
 
 	var edit := Button.new()

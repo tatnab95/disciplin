@@ -448,6 +448,27 @@ msgstr "● сейчас"
 msgid "settings_lang"
 msgstr "Язык"
 
+msgid "settings_theme"
+msgstr "Тема"
+
+msgid "theme_dark"
+msgstr "Тёмная"
+
+msgid "theme_light"
+msgstr "Светлая"
+
+msgid "settings_accent"
+msgstr "Акцентный цвет"
+
+msgid "accent_blue"
+msgstr "Синий"
+
+msgid "accent_green"
+msgstr "Зелёный"
+
+msgid "accent_gray"
+msgstr "Серый"
+
 msgid "settings_ai"
 msgstr "ИИ-распознавание еды (необязательно)"
 

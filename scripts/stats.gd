@@ -15,6 +15,7 @@ var _charts_box: VBoxContainer
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_stats")
 	_build()
@@ -71,7 +72,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -143,7 +144,7 @@ func _build_charts() -> void:
 		tr("chart_activity"),
 		[
 			{"name": tr("chart_game"), "color": Color("f778ba"), "values": game_values},
-			{"name": tr("chart_sport"), "color": Color("4cc38a"), "values": sport_values},
+			{"name": tr("chart_sport"), "color": ThemeManager.accent, "values": sport_values},
 		],
 		labels,
 		false,
@@ -173,7 +174,7 @@ func _chart_card(title: String, series: Array, labels: Array, lines: bool, subti
 	if not subtitle.is_empty():
 		var sub := Label.new()
 		sub.text = subtitle
-		sub.add_theme_color_override("font_color", Color("8b949e"))
+		sub.add_theme_color_override("font_color", ThemeManager.text_secondary)
 		head.add_child(sub)
 	vb.add_child(head)
 	var chart := Chart.new()

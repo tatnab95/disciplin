@@ -21,6 +21,7 @@ var _list_box: VBoxContainer
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_sport")
 	_build()
@@ -92,7 +93,7 @@ func _build() -> void:
 	vb2.add_child(_title(tr("sport_goal")))
 	_goal_label = Label.new()
 	_goal_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_goal_label.add_theme_color_override("font_color", Color("8b949e"))
+	_goal_label.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb2.add_child(_goal_label)
 
 	var arr3 := _make_card()
@@ -129,7 +130,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -175,7 +176,7 @@ func _refresh() -> void:
 	if trainings.is_empty():
 		var l := Label.new()
 		l.text = tr("no_data")
-		l.add_theme_color_override("font_color", Color("8b949e"))
+		l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 		_list_box.add_child(l)
 		return
 	for t in trainings:
@@ -201,12 +202,12 @@ func _training_row(t: Dictionary) -> HBoxContainer:
 
 	var dur := Label.new()
 	dur.text = "%d %s" % [int(t.get("duration", 0)), tr("min_unit")]
-	dur.add_theme_color_override("font_color", Color("8b949e"))
+	dur.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	h.add_child(dur)
 
 	var date := Label.new()
 	date.text = TimeManager.format_date_short(str(t.get("date", "")))
-	date.add_theme_color_override("font_color", Color("8b949e"))
+	date.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	h.add_child(date)
 
 	var del := Button.new()

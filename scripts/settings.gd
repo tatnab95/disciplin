@@ -15,10 +15,13 @@ var _game_limit_spin: SpinBox
 var _sport_sessions_spin: SpinBox
 var _sport_minutes_spin: SpinBox
 var _water_spin: SpinBox
+var _theme_box: OptionButton
+var _accent_box: OptionButton
 var _status: Label
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_settings")
 	_build()
@@ -43,6 +46,24 @@ func _build() -> void:
 		DataManager.set_lang("ru" if idx == 0 else "en")
 	)
 	vb.add_child(_lang_box)
+
+	vb.add_child(_title(tr("settings_theme")))
+	_theme_box = OptionButton.new()
+	_theme_box.add_item(tr("theme_dark"))
+	_theme_box.add_item(tr("theme_light"))
+	_theme_box.select(0 if str(DataManager.get_setting("theme", "dark")) == "dark" else 1)
+	_theme_box.item_selected.connect(_on_theme_selected)
+	vb.add_child(_theme_box)
+
+	vb.add_child(_title(tr("settings_accent")))
+	_accent_box = OptionButton.new()
+	_accent_box.add_item(tr("accent_blue"))
+	_accent_box.add_item(tr("accent_green"))
+	_accent_box.add_item(tr("accent_gray"))
+	var acc_idx := ["blue", "green", "gray"].find(str(DataManager.get_setting("accent", "blue")))
+	_accent_box.select(maxi(0, acc_idx))
+	_accent_box.item_selected.connect(_on_accent_selected)
+	vb.add_child(_accent_box)
 
 	vb.add_child(_title(tr("settings_ai")))
 	_api_key_edit = _secret_edit(tr("settings_api_key"), str(DataManager.get_setting("vision_api_key", "")))
@@ -72,7 +93,7 @@ func _build() -> void:
 
 	_status = Label.new()
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_status.add_theme_color_override("font_color", Color("8b949e"))
+	_status.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb.add_child(_status)
 
 	var arr2 := _make_card()
@@ -107,7 +128,7 @@ func _build() -> void:
 	var about := Label.new()
 	about.text = tr("about_text")
 	about.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	about.add_theme_color_override("font_color", Color("8b949e"))
+	about.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb3.add_child(about)
 
 	var spacer_bottom := Control.new()
@@ -133,7 +154,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -169,6 +190,25 @@ func _spin(min_v: float, max_v: float, step: float, value: float) -> SpinBox:
 	s.value = value
 	s.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return s
+
+
+func _on_theme_selected(idx: int) -> void:
+	DataManager.set_setting("theme", "dark" if idx == 0 else "light")
+	ThemeManager.apply()
+	_rebuild.call_deferred()
+
+
+func _on_accent_selected(idx: int) -> void:
+	DataManager.set_setting("accent", ["blue", "green", "gray"][idx])
+	ThemeManager.apply()
+	_rebuild.call_deferred()
+
+
+func _rebuild() -> void:
+	for c in content.get_children():
+		content.remove_child(c)
+		c.free()
+	_build()
 
 
 func _on_save() -> void:

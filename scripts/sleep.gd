@@ -15,6 +15,7 @@ var _week_label: Label
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_sleep")
 	_build()
@@ -61,7 +62,7 @@ func _build() -> void:
 
 	_summary_label = Label.new()
 	_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_summary_label.add_theme_color_override("font_color", Color("8b949e"))
+	_summary_label.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb.add_child(_summary_label)
 
 	var save := Button.new()
@@ -77,7 +78,7 @@ func _build() -> void:
 	vb2.add_child(_title(tr("week_avg_title")))
 	_week_label = Label.new()
 	_week_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_week_label.add_theme_color_override("font_color", Color("8b949e"))
+	_week_label.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb2.add_child(_week_label)
 
 	var spacer_bottom := Control.new()
@@ -105,7 +106,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -141,7 +142,7 @@ func _on_save() -> void:
 	var bt := _bed_edit.text.strip_edges()
 	var wk := _wake_edit.text.strip_edges()
 	if not (_valid_time(bt) and _valid_time(wk)):
-		_summary_label.add_theme_color_override("font_color", Color("f87171"))
+		_summary_label.add_theme_color_override("font_color", ThemeManager.danger)
 		_summary_label.text = tr("invalid_time")
 		return
 	DataManager.set_sleep(bt, wk, int(_quality_slider.value))

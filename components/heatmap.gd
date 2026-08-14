@@ -3,22 +3,34 @@ extends Control
 ## set_values() принимает массив из float 0..1 (самые старые дни первыми).
 
 var values: Array = []
+var _colors: Array = []
 
-var _colors := [
-	Color("1b2127"),
-	Color("223d31"),
-	Color("2c5a43"),
-	Color("3f7d5a"),
-	Color("4cc38a"),
-]
+
+func _ready() -> void:
+	ThemeManager.theme_changed.connect(_on_theme_changed)
+
+
+func _on_theme_changed() -> void:
+	_colors = []
+	queue_redraw()
 
 
 func set_values(v: Array) -> void:
 	values = v
+	_colors = []
 	queue_redraw()
 
 
+func _ensure_colors() -> void:
+	if not _colors.is_empty():
+		return
+	var base := ThemeManager.accent
+	for i in range(5):
+		_colors.append(base.darkened(0.8 - i * 0.2))
+
+
 func _draw() -> void:
+	_ensure_colors()
 	var cols := 5
 	var rows := 7
 	var cell := 14.0

@@ -7,7 +7,7 @@ extends Control
 
 func _ready() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color("121417")
+	bg.color = ThemeManager.bg
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 
@@ -21,13 +21,13 @@ func _ready() -> void:
 	title.text = tr(title_key)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 30)
-	title.add_theme_color_override("font_color", Color("e6edf3"))
+	title.add_theme_color_override("font_color", ThemeManager.text)
 	vb.add_child(title)
 
 	var soon := Label.new()
 	soon.text = tr("coming_soon")
 	soon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	soon.add_theme_color_override("font_color", Color("8b949e"))
+	soon.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb.add_child(soon)
 
 	var back := Button.new()

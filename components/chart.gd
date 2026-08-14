@@ -2,54 +2,54 @@ extends Control
 ## Простой самодельный график (без плагинов).
 ## set_data(series, labels, is_lines):
 ##   series: [{ "name": String, "color": Color, "values": Array }]
-##   labels: Array[String] — подпись для каждого столбца/точки
+##   labels: подписи под точками/столбцами (необязательно)
+##   is_lines: true — ломаные, false — столбцы
 
 var series: Array = []
 var labels: Array = []
-var lines := false
-
-var grid_color := Color(0.2, 0.24, 0.28, 1.0)
-var text_color := Color("8b949e")
-var font_size := 12
+var is_lines := false
 
 
-func set_data(s: Array, l: Array, is_lines := false) -> void:
+func _ready() -> void:
+	ThemeManager.theme_changed.connect(queue_redraw)
+
+
+func set_data(s, l := [], lines := false) -> void:
 	series = s
 	labels = l
-	lines = is_lines
+	is_lines = lines
 	queue_redraw()
 
 
 func _draw() -> void:
-	if series.is_empty():
-		return
+	var font := ThemeDB.fallback_font
+	var font_size := 11
+	var grid_color: Color = ThemeManager.border
+	var text_color: Color = ThemeManager.text_secondary
+	var padding := 10
+	var legend_h := 0
+	if series.size() > 1:
+		legend_h = 20
+	var area := Rect2(padding, padding, size.x - padding * 2.0, size.y - padding * 2.0 - legend_h)
 	var n := 0
-	for s in series:
-		n = maxi(n, (s["values"] as Array).size())
-	if n == 0:
-		return
 	var max_v := 1.0
 	for s in series:
-		for v in s["values"]:
+		var vals: Array = s["values"]
+		n = maxi(n, vals.size())
+		for v in vals:
 			max_v = maxf(max_v, float(v))
-
-	var pad_left := 6.0
-	var pad_top := 22.0
-	var pad_bottom := 26.0
-	var area := Rect2(pad_left, pad_top, maxf(1.0, size.x - pad_left * 2.0), maxf(1.0, size.y - pad_top - pad_bottom))
-
-	# сетка
-	var steps := 4
-	for g in range(steps + 1):
-		var ratio := float(g) / float(steps)
-		var y := area.position.y + area.size.y * ratio
-		draw_line(Vector2(area.position.x, y), Vector2(area.end.x, y), grid_color, 1.0, true)
-
-	var font := ThemeDB.fallback_font
-	draw_string(font, Vector2(pad_left, 14), "%d" % int(max_v), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
-	draw_string(font, Vector2(pad_left, size.y - 8), "0", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
-
-	if lines:
+	if n == 0:
+		return
+	for i in range(4):
+		var y := area.position.y + area.size.y * i / 3.0
+		draw_line(Vector2(area.position.x, y), Vector2(area.end.x, y), Color(grid_color, 0.5), 1.0)
+	if not labels.is_empty():
+		for i in labels.size():
+			var text := str(labels[i])
+			var tw := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size).x
+			var x := area.position.x + area.size.x * (i + 0.5) / n
+			draw_string(font, Vector2(x - tw / 2.0, area.end.y + font_size + 4.0), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, text_color)
+	if is_lines:
 		for s in series:
 			var vals: Array = s["values"]
 			if vals.size() < 2:
@@ -58,26 +58,22 @@ func _draw() -> void:
 			for i in vals.size():
 				var x := area.position.x + area.size.x * (i + 0.5) / n
 				var y := area.end.y - area.size.y * (float(vals[i]) / max_v)
-				pts.append(Vector2(x, y))
-			draw_polyline(pts, s["color"], 2.5, true)
+				pts.push_back(Vector2(x, y))
+			draw_polyline(pts, s["color"], 2.0, true)
 	else:
-		var slot := area.size.x / n
-		var bar_w := maxf(2.0, slot * 0.6 / series.size())
-		for i in n:
-			for si in series.size():
-				var s: Dictionary = series[si]
-				var v := clampf(float(s["values"][i]), 0.0, max_v)
-				var bh := area.size.y * (v / max_v)
-				var x := area.position.x + i * slot + slot * 0.2 + si * bar_w
-				draw_rect(Rect2(x, area.end.y - bh, bar_w, bh), s["color"])
-
-	# подписи по X
-	var step := maxi(1, int(ceil(n / 7.0)))
-	for i in n:
-		if i % step != 0 and i != n - 1:
-			continue
-		if labels.size() > i:
-			var x := area.position.x + area.size.x * (i + 0.5) / n
-			var text := str(labels[i])
-			var w := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size).x
-			draw_string(font, Vector2(clampf(x - w / 2.0, 0, size.x - w), size.y - 6), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, text_color)
+		for s in series:
+			var vals: Array = s["values"]
+			for i in n:
+				var v := clampf(float(vals[i]) if i < vals.size() else 0.0, 0.0, max_v)
+				var h := maxf(1.0, area.size.y * (v / max_v))
+				var bw := area.size.x / n * 0.6
+				var x := area.position.x + area.size.x * i / n + (area.size.x / n - bw) / 2.0
+				draw_rect(Rect2(x, area.end.y - h, bw, h), s["color"])
+	if series.size() > 1:
+		var legend_y := size.y - legend_h / 2.0 - 2.0
+		var x := padding
+		for s in series:
+			var tw := font.get_string_size(str(s["name"]), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+			draw_rect(Rect2(x, legend_y - 8, 10, 10), s["color"])
+			draw_string(font, Vector2(x + 14, legend_y + font_size * 0.35), str(s["name"]), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
+			x += 14 + tw + 14

@@ -1,15 +1,15 @@
 extends Control
 
 const SECTIONS := [
-	["dashboard", "menu_dashboard"],
-	["habits", "menu_habits"],
-	["planner", "menu_planner"],
-	["sleep", "menu_sleep"],
-	["checkin", "menu_checkin"],
-	["food", "menu_food"],
-	["sport", "menu_sport"],
-	["stats", "menu_stats"],
-	["settings", "menu_settings"],
+	["dashboard", "menu_dashboard", "📊"],
+	["habits", "menu_habits", "✅"],
+	["planner", "menu_planner", "🗓"],
+	["sleep", "menu_sleep", "😴"],
+	["checkin", "menu_checkin", "⚡"],
+	["food", "menu_food", "🍎"],
+	["sport", "menu_sport", "🏋️"],
+	["stats", "menu_stats", "📈"],
+	["settings", "menu_settings", "⚙️"],
 ]
 
 @onready var title_label: Label = %TitleLabel
@@ -19,13 +19,14 @@ const SECTIONS := [
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	title_label.text = tr("app_title")
 	subtitle_label.text = tr("app_subtitle")
 	version_label.text = tr("menu_version").format({"v": "0.2.0"})
 	for s in SECTIONS:
 		var btn := Button.new()
-		btn.text = tr(s[1])
-		btn.custom_minimum_size = Vector2(200, 60)
+		btn.text = "%s\n%s" % [s[2], tr(s[1])]
+		btn.custom_minimum_size = Vector2(0, 96)
 		btn.pressed.connect(_open.bind(s[0]))
 		grid.add_child(btn)
 

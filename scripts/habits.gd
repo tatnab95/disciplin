@@ -13,6 +13,7 @@ var _list_box: VBoxContainer
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_habits")
 	DataManager.data_changed.connect(_refresh)
@@ -49,7 +50,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -108,8 +109,12 @@ func _habit_row(habit: Dictionary) -> HBoxContainer:
 	var id: String = habit.get("id", "")
 	var today := TimeManager.today_str()
 
-	var cb := CheckButton.new()
-	cb.button_pressed = DataManager.is_habit_done(id, today)
+	var done := DataManager.is_habit_done(id, today)
+	var cb := Button.new()
+	cb.toggle_mode = true
+	cb.custom_minimum_size = Vector2(56, 44)
+	cb.button_pressed = done
+	cb.text = "✓" if done else ""
 	cb.toggled.connect(func(pressed: bool) -> void:
 		DataManager.set_habit_done(id, today, pressed)
 	)

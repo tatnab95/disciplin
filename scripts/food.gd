@@ -28,6 +28,7 @@ var _photo_path := ""
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_food")
 	DataManager.data_changed.connect(_refresh_today)
@@ -68,7 +69,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
@@ -107,7 +108,7 @@ func _build_add_card() -> PanelContainer:
 	_ai_status.text = tr("meal_hint")
 	_ai_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_ai_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_ai_status.add_theme_color_override("font_color", Color("8b949e"))
+	_ai_status.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	phrow.add_child(_ai_status)
 	vb.add_child(phrow)
 
@@ -204,7 +205,7 @@ func _on_photo_selected(path: String) -> void:
 	var stored := _copy_to_photos(path)
 	if stored.is_empty():
 		_ai_status.text = tr("photo_error")
-		_ai_status.add_theme_color_override("font_color", Color("f87171"))
+		_ai_status.add_theme_color_override("font_color", ThemeManager.danger)
 		return
 	_photo_path = stored
 	_ai_status.text = tr("ai_thinking")
@@ -226,7 +227,7 @@ func _copy_to_photos(src: String) -> String:
 
 func _on_ai_result(result: Dictionary) -> void:
 	if not result.get("ok", false):
-		_ai_status.add_theme_color_override("font_color", Color("f87171"))
+		_ai_status.add_theme_color_override("font_color", ThemeManager.danger)
 		_ai_status.text = tr("ai_error_unknown")
 		var err := str(result.get("error", ""))
 		if err == "no_api_key":
@@ -256,7 +257,7 @@ func _refresh_pending() -> void:
 	if _pending_items.is_empty():
 		var l := Label.new()
 		l.text = tr("meal_empty")
-		l.add_theme_color_override("font_color", Color("8b949e"))
+		l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 		_pending_box.add_child(l)
 		return
 	for item in _pending_items:
@@ -287,7 +288,7 @@ func _pending_row(item: Dictionary) -> HBoxContainer:
 	kcal.text = "%d ккал" % int(item.get("calories", 0))
 	kcal.custom_minimum_size = Vector2(72, 0)
 	kcal.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	kcal.add_theme_color_override("font_color", Color("8b949e"))
+	kcal.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	h.add_child(kcal)
 
 	var del := Button.new()
@@ -342,7 +343,7 @@ func _build_today_card() -> PanelContainer:
 	vb.add_child(_title(tr("today_meals")))
 	_totals_label = Label.new()
 	_totals_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_totals_label.add_theme_color_override("font_color", Color("8b949e"))
+	_totals_label.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb.add_child(_totals_label)
 	_today_box = VBoxContainer.new()
 	_today_box.add_theme_constant_override("separation", 8)
@@ -372,7 +373,7 @@ func _refresh_today() -> void:
 	if meals.is_empty():
 		var l := Label.new()
 		l.text = tr("no_data")
-		l.add_theme_color_override("font_color", Color("8b949e"))
+		l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 		_today_box.add_child(l)
 		return
 	for m in meals:
@@ -411,7 +412,7 @@ func _today_row(meal: Dictionary) -> HBoxContainer:
 	var line2 := Label.new()
 	line2.text = ", ".join(item_names)
 	line2.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	line2.add_theme_color_override("font_color", Color("8b949e"))
+	line2.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	info.add_child(line2)
 	h.add_child(info)
 

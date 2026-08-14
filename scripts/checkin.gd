@@ -17,6 +17,7 @@ var _values: Dictionary = {}
 
 
 func _ready() -> void:
+	$Bg.color = ThemeManager.bg
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_checkin")
 	_build()
@@ -38,7 +39,7 @@ func _build() -> void:
 	var hint := Label.new()
 	hint.text = tr("checkin_hint")
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hint.add_theme_color_override("font_color", Color("8b949e"))
+	hint.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	vb.add_child(hint)
 
 	for f in FIELDS:
@@ -100,7 +101,7 @@ func _title(text: String) -> Label:
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_size_override("font_size", 20)
-	l.add_theme_color_override("font_color", Color("8b949e"))
+	l.add_theme_color_override("font_color", ThemeManager.text_secondary)
 	return l
 
 
