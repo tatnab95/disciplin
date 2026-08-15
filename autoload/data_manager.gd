@@ -427,6 +427,7 @@ func _default_data() -> Dictionary:
 			"theme": "light",
 			"accent": "blue",
 			"vision_api_key": "",
+			"vision_provider": "openai",
 			"vision_base_url": "https://api.openai.com/v1",
 			"vision_model": "gpt-4o-mini",
 			"sleep_target_hours": 8.0,
@@ -481,6 +482,8 @@ func _ensure_structures() -> void:
 		s["accent"] = "blue"
 	if not s.has("vision_api_key"):
 		s["vision_api_key"] = ""
+	if not s.has("vision_provider"):
+		s["vision_provider"] = "openai"
 	if not s.has("vision_base_url"):
 		s["vision_base_url"] = "https://api.openai.com/v1"
 	if not s.has("vision_model"):

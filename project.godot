@@ -41,6 +41,10 @@ locale/translations=PackedStringArray("res://localization/ru.po")
 
 enabled=PackedStringArray("res://addons/GodotGetImage/plugin.cfg")
 
+[android]
+
+custom_manifest="res://android/AndroidManifest.xml"
+
 [rendering]
 
 rendering_device/driver.windows="d3d12"

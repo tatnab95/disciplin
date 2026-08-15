@@ -7,9 +7,11 @@ extends Control
 @onready var content: VBoxContainer = %Content
 
 var _lang_box: OptionButton
+var _provider_box: OptionButton
 var _api_key_edit: LineEdit
 var _base_url_edit: LineEdit
 var _model_edit: LineEdit
+var _ai_hint: Label
 var _sleep_target_spin: SpinBox
 var _game_limit_spin: SpinBox
 var _sport_sessions_spin: SpinBox
@@ -70,12 +72,23 @@ func _build() -> void:
 	vb.add_child(_accent_box)
 
 	vb.add_child(_title(tr("settings_ai")))
+	_provider_box = OptionButton.new()
+	_provider_box.add_item(tr("settings_provider_openai"))
+	_provider_box.add_item(tr("settings_provider_ollama"))
+	_provider_box.select(0 if str(DataManager.get_setting("vision_provider", "openai")) == "openai" else 1)
+	_provider_box.item_selected.connect(_on_provider_selected)
+	vb.add_child(_provider_box)
+	_ai_hint = Label.new()
+	_ai_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_ai_hint.add_theme_color_override("font_color", ThemeManager.text_secondary)
+	vb.add_child(_ai_hint)
 	_api_key_edit = _secret_edit(tr("settings_api_key"), str(DataManager.get_setting("vision_api_key", "")))
 	vb.add_child(_label_row(tr("settings_api_key"), _api_key_edit))
 	_base_url_edit = _text_edit(tr("settings_base_url"), str(DataManager.get_setting("vision_base_url", "")))
 	vb.add_child(_label_row(tr("settings_base_url"), _base_url_edit))
 	_model_edit = _text_edit(tr("settings_model"), str(DataManager.get_setting("vision_model", "")))
 	vb.add_child(_label_row(tr("settings_model"), _model_edit))
+	_update_ai_hint()
 
 	vb.add_child(_title(tr("settings_goals")))
 	_sleep_target_spin = _spin(4.0, 12.0, 0.5, float(DataManager.get_setting("sleep_target_hours", 8.0)))
@@ -215,7 +228,32 @@ func _rebuild() -> void:
 	_build()
 
 
+func _on_provider_selected(idx: int) -> void:
+	var url := _base_url_edit.text.strip_edges()
+	if idx == 1:
+		if url.is_empty() or url.contains("openai"):
+			_base_url_edit.text = "http://192.168.1.100:11434/v1"
+		if _model_edit.text.strip_edges().is_empty():
+			_model_edit.text = "qwen2.5vl:7b"
+	else:
+		if url.is_empty() or url.contains("11434"):
+			_base_url_edit.text = "https://api.openai.com/v1"
+		if _model_edit.text.strip_edges().is_empty():
+			_model_edit.text = "gpt-4o-mini"
+	_update_ai_hint()
+
+
+func _update_ai_hint() -> void:
+	if _provider_box.selected == 1:
+		_ai_hint.text = tr("settings_ollama_hint")
+		_api_key_edit.placeholder_text = tr("settings_key_not_needed")
+	else:
+		_ai_hint.text = ""
+		_api_key_edit.placeholder_text = ""
+
+
 func _on_save() -> void:
+	DataManager.set_setting("vision_provider", "openai" if _provider_box.selected == 0 else "ollama")
 	DataManager.set_setting("vision_api_key", _api_key_edit.text.strip_edges())
 	DataManager.set_setting("vision_base_url", _base_url_edit.text.strip_edges())
 	DataManager.set_setting("vision_model", _model_edit.text.strip_edges())

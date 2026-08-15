@@ -481,6 +481,21 @@ msgstr "Base URL"
 msgid "settings_model"
 msgstr "Модель"
 
+msgid "settings_provider"
+msgstr "Провайдер ИИ"
+
+msgid "settings_provider_openai"
+msgstr "OpenAI / совместимый"
+
+msgid "settings_provider_ollama"
+msgstr "Ollama (свой ПК)"
+
+msgid "settings_ollama_hint"
+msgstr "Бесплатно и без ключа. Укажи в Base URL IP своего компьютера, например http://192.168.1.100:11434/v1, и модель с поддержкой зрения (qwen2.5vl, llava)."
+
+msgid "settings_key_not_needed"
+msgstr "не нужен для Ollama"
+
 msgid "settings_goals"
 msgstr "Цели"
 

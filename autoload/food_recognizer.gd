@@ -20,6 +20,9 @@ func _ready() -> void:
 
 
 func is_configured() -> bool:
+	var provider := str(DataManager.get_setting("vision_provider", "openai"))
+	if provider == "ollama":
+		return not str(DataManager.get_setting("vision_base_url", "")).strip_edges().is_empty()
 	var k: String = str(DataManager.get_setting("vision_api_key", ""))
 	return not k.strip_edges().is_empty()
 
