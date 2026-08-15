@@ -22,6 +22,8 @@ const REC_STYLE := {
 	"food": {"icon": "🍎", "color": Color("e3b341")},
 }
 
+const AI_ASK_PROMPT := "You are a funny life coach and fortune teller. Look at the photo. Give ONE short playful piece of advice or a funny prediction about what this person should do right now. Answer in Russian, 1-3 sentences, friendly, encouraging and humorous. No markdown, no explanations."
+
 @onready var date_label: Label = %DateLabel
 @onready var menu_btn: Button = %MenuBtn
 @onready var content: VBoxContainer = %Content
@@ -30,6 +32,8 @@ var _score_ring: Node
 var _score_total_label: Label
 var _parts_label: Label
 var _assistant_label: Label
+var _ai_dialog: AcceptDialog
+var _ai_processing := false
 var _rec_box: VBoxContainer
 var _schedule_label: Label
 var _progress_box: VBoxContainer
@@ -111,7 +115,90 @@ func _assistant_card() -> PanelContainer:
 	_assistant_label = l
 
 	vb.add_child(hbox)
+
+	var ask := Button.new()
+	ask.text = "Спросить ИИ по фото 📸"
+	ask.custom_minimum_size = Vector2(0, 44)
+	ask.pressed.connect(_on_ask_ai)
+	vb.add_child(ask)
 	return card
+
+
+func _on_ask_ai() -> void:
+	if _ai_processing:
+		return
+	var fd := FileDialog.new()
+	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	fd.access = FileDialog.ACCESS_FILESYSTEM
+	fd.filters = PackedStringArray(["*.png, *.jpg, *.jpeg, *.webp ; Изображения"])
+	fd.file_selected.connect(_on_ai_photo_selected)
+	add_child(fd)
+	fd.popup_centered()
+
+
+func _on_ai_photo_selected(path: String) -> void:
+	_ai_processing = true
+	var stored := _copy_photo(path)
+	if stored.is_empty():
+		_ai_processing = false
+		_show_ai_popup(tr("photo_error"), ThemeManager.danger)
+		return
+	_show_ai_popup(tr("ai_thinking"), ThemeManager.text_secondary)
+	if not FoodRecognizer.is_configured():
+		_ai_processing = false
+		_show_ai_popup(_random_fun(), ThemeManager.text)
+		return
+	FoodRecognizer.ask_vision(stored, AI_ASK_PROMPT, _on_ask_result)
+
+
+func _copy_photo(src: String) -> String:
+	var img: Image = Image.load_from_file(src)
+	if img == null:
+		return ""
+	var dst := "user://photos/%d.jpg" % Time.get_unix_time_from_system()
+	var f := FileAccess.open(dst, FileAccess.WRITE)
+	if f == null:
+		return ""
+	f.store_buffer(img.save_jpg_to_buffer(0.85))
+	return dst
+
+
+func _on_ask_result(result: Dictionary) -> void:
+	_ai_processing = false
+	if not result.get("ok", false):
+		var err := str(result.get("error", ""))
+		if err == "network_error":
+			_show_ai_popup(tr("ai_network"), ThemeManager.danger)
+		else:
+			_show_ai_popup(tr("ai_error_unknown"), ThemeManager.danger)
+		return
+	var text := str(result.get("text", "")).strip_edges()
+	if text.is_empty():
+		_show_ai_popup(tr("ai_no_food"), ThemeManager.danger)
+		return
+	_show_ai_popup(text, ThemeManager.text)
+
+
+func _show_ai_popup(text: String, color: Color) -> void:
+	if _ai_dialog == null:
+		_ai_dialog = AcceptDialog.new()
+		_ai_dialog.title = "🔮 ИИ-совет"
+		var l := _ai_dialog.get_label()
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size = Vector2(320, 0)
+		add_child(_ai_dialog)
+	_ai_dialog.get_label().add_theme_color_override("font_color", color)
+	_ai_dialog.dialog_text = text
+	_ai_dialog.popup_centered()
+
+
+func _random_fun() -> String:
+	var msgs := [
+		"Ключ ИИ не настроен, но я и так всё вижу: сделай перерыв и выпей воды 💧",
+		"Без API-ключа — только магия. Моя версия: отдохни и улыбнись 😄",
+		"Не могу заглянуть в фото, но совет от сердца: сегодня ты уже справился 🌟",
+	]
+	return msgs[randi() % msgs.size()]
 
 
 func _hero_card() -> PanelContainer:

@@ -28,26 +28,48 @@ func recognize_image(path: String, on_done: Callable) -> void:
 	if not is_configured():
 		on_done.call({"ok": false, "error": "no_api_key"})
 		return
-	var img: Image = Image.load_from_file(path)
+	var img := _prepare_image(path)
 	if img == null:
 		on_done.call({"ok": false, "error": "cant_read_image"})
 		return
+	_send_request(img, VISION_PROMPT, 700, 0.1, on_done)
+
+
+func ask_vision(path: String, prompt: String, on_done: Callable) -> void:
+	if not is_configured():
+		on_done.call({"ok": false, "error": "no_api_key"})
+		return
+	var img := _prepare_image(path)
+	if img == null:
+		on_done.call({"ok": false, "error": "cant_read_image"})
+		return
+	_send_request(img, prompt, 500, 0.9, on_done)
+
+
+func _prepare_image(path: String) -> Image:
+	var img: Image = Image.load_from_file(path)
+	if img == null:
+		return null
 	if img.get_width() > 1024 or img.get_height() > 1024:
 		var scale := minf(1024.0 / img.get_width(), 1024.0 / img.get_height())
 		var new_w := int(round(img.get_width() * scale))
 		var new_h := int(round(img.get_height() * scale))
 		img = img.duplicate()
 		img.resize(new_w, new_h, Image.INTERPOLATE_LANCZOS)
+	return img
+
+
+func _send_request(img: Image, prompt: String, max_tokens: int, temperature: float, on_done: Callable) -> void:
 	var b64 := Marshalls.raw_to_base64(img.save_jpg_to_buffer(0.85))
 	var payload := {
 		"model": str(DataManager.get_setting("vision_model", "gpt-4o-mini")),
-		"max_tokens": 700,
-		"temperature": 0.1,
+		"max_tokens": max_tokens,
+		"temperature": temperature,
 		"messages": [
 			{
 				"role": "user",
 				"content": [
-					{"type": "text", "text": VISION_PROMPT},
+					{"type": "text", "text": prompt},
 					{"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,%s" % b64}},
 				],
 			}
@@ -81,7 +103,7 @@ func _on_completed(result: int, response_code: int, headers: PackedStringArray, 
 	if content.is_empty():
 		_finish({"ok": false, "error": "empty_content"})
 		return
-	_finish({"ok": true, "items": _extract_items(content)})
+	_finish({"ok": true, "text": content, "items": _extract_items(content)})
 
 
 func _extract_content(parsed: Dictionary) -> String:
