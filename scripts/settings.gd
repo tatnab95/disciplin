@@ -12,6 +12,8 @@ var _api_key_edit: LineEdit
 var _base_url_edit: LineEdit
 var _model_edit: LineEdit
 var _ai_hint: Label
+var _test_btn: Button
+var _test_status: Label
 var _sleep_target_spin: SpinBox
 var _game_limit_spin: SpinBox
 var _sport_sessions_spin: SpinBox
@@ -88,6 +90,17 @@ func _build() -> void:
 	vb.add_child(_label_row(tr("settings_base_url"), _base_url_edit))
 	_model_edit = _text_edit(tr("settings_model"), str(DataManager.get_setting("vision_model", "")))
 	vb.add_child(_label_row(tr("settings_model"), _model_edit))
+	var test_row := HBoxContainer.new()
+	test_row.add_theme_constant_override("separation", 10)
+	_test_btn = Button.new()
+	_test_btn.text = tr("settings_test_conn")
+	_test_btn.pressed.connect(_on_test_conn)
+	test_row.add_child(_test_btn)
+	_test_status = Label.new()
+	_test_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_test_status.add_theme_color_override("font_color", ThemeManager.text_secondary)
+	test_row.add_child(_test_status)
+	vb.add_child(test_row)
 	_update_ai_hint()
 
 	vb.add_child(_title(tr("settings_goals")))
@@ -226,6 +239,36 @@ func _rebuild() -> void:
 		content.remove_child(c)
 		c.free()
 	_build()
+
+
+func _on_test_conn() -> void:
+	_test_status.text = tr("settings_testing")
+	_test_status.add_theme_color_override("font_color", ThemeManager.text_secondary)
+	_test_btn.disabled = true
+	FoodRecognizer.test_connection(
+		_on_test_done,
+		_base_url_edit.text.strip_edges(),
+		_model_edit.text.strip_edges(),
+		_api_key_edit.text.strip_edges()
+	)
+
+
+func _on_test_done(res: Dictionary) -> void:
+	_test_btn.disabled = false
+	if res.get("ok", false):
+		_test_status.text = tr("settings_test_ok")
+		_test_status.add_theme_color_override("font_color", ThemeManager.success)
+		return
+	var code := int(res.get("http", 0))
+	_test_status.add_theme_color_override("font_color", ThemeManager.danger)
+	if code == 0:
+		_test_status.text = tr("settings_test_no_conn")
+	elif code == 401:
+		_test_status.text = tr("settings_test_bad_key")
+	elif code == 404:
+		_test_status.text = tr("settings_test_bad_model")
+	else:
+		_test_status.text = tr("settings_test_fail").format({"code": code})
 
 
 func _on_provider_selected(idx: int) -> void:

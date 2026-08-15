@@ -496,6 +496,27 @@ msgstr "Бесплатно и без ключа. Укажи в Base URL IP св�
 msgid "settings_key_not_needed"
 msgstr "не нужен для Ollama"
 
+msgid "settings_test_conn"
+msgstr "Проверить подключение"
+
+msgid "settings_testing"
+msgstr "Проверка… (первая может занять до минуты)"
+
+msgid "settings_test_ok"
+msgstr "Подключение работает."
+
+msgid "settings_test_no_conn"
+msgstr "Нет связи с сервером. Проверь IP компьютера, Wi-Fi и что Ollama запущен."
+
+msgid "settings_test_bad_key"
+msgstr "Сервер отвечает, но ключ не принят (401)."
+
+msgid "settings_test_bad_model"
+msgstr "Модель не найдена (404). Проверь название — например, ollama list."
+
+msgid "settings_test_fail"
+msgstr "Ошибка подключения (код %d)."
+
 msgid "settings_goals"
 msgstr "Цели"
 

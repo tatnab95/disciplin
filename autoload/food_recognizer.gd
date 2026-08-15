@@ -27,6 +27,39 @@ func is_configured() -> bool:
 	return not k.strip_edges().is_empty()
 
 
+## Минимальный запрос для проверки связи с провайдером до экспорта APK.
+## Параметры можно передать из полей настроек, чтобы проверять до сохранения.
+func test_connection(on_done: Callable, base_url: String = "", model: String = "", key: String = "") -> void:
+	var req := HTTPRequest.new()
+	req.timeout = 30
+	add_child(req)
+	req.request_completed.connect(func(r: int, code: int, _h: PackedStringArray, body: PackedByteArray) -> void:
+		var res := {"ok": code == 200, "http": code}
+		if code != 200:
+			var s := body.get_string_from_utf8().strip_edges()
+			if s.length() > 200:
+				s = s.left(200)
+			res["detail"] = s
+		req.queue_free()
+		on_done.call(res)
+	)
+	var payload := {
+		"model": model if not model.is_empty() else str(DataManager.get_setting("vision_model", "gpt-4o-mini")),
+		"max_tokens": 1,
+		"temperature": 0.0,
+		"messages": [{"role": "user", "content": "ping"}],
+	}
+	var url := "%s/chat/completions" % (base_url if not base_url.is_empty() else str(DataManager.get_setting("vision_base_url", "https://api.openai.com/v1"))).trim_suffix("/")
+	var h := [
+		"Content-Type: application/json",
+		"Authorization: Bearer %s" % (key if not key.is_empty() else str(DataManager.get_setting("vision_api_key", ""))),
+	]
+	var err := req.request(url, h, HTTPClient.METHOD_POST, JSON.stringify(payload))
+	if err != OK:
+		req.queue_free()
+		on_done.call({"ok": false, "http": 0, "detail": "http_error"})
+
+
 func recognize_image(path: String, on_done: Callable) -> void:
 	if not is_configured():
 		on_done.call({"ok": false, "error": "no_api_key"})
