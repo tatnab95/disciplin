@@ -262,7 +262,11 @@ func _on_test_done(res: Dictionary) -> void:
 	var code := int(res.get("http", 0))
 	_test_status.add_theme_color_override("font_color", ThemeManager.danger)
 	if code == 0:
-		_test_status.text = tr("settings_test_no_conn")
+		var rc := int(res.get("result", 0))
+		if rc != 0:
+			_test_status.text = tr("settings_test_no_conn_code").format({"c": rc})
+		else:
+			_test_status.text = tr("settings_test_no_conn")
 	elif code == 401:
 		_test_status.text = tr("settings_test_bad_key")
 	elif code == 404:

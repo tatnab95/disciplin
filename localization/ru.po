@@ -508,6 +508,9 @@ msgstr "Подключение работает."
 msgid "settings_test_no_conn"
 msgstr "Нет связи с сервером. Проверь IP компьютера, Wi-Fi и что Ollama запущен."
 
+msgid "settings_test_no_conn_code"
+msgstr "Нет связи с сервером (код %d). Проверь IP, Wi-Fi и что Ollama слушает 0.0.0.0."
+
 msgid "settings_test_bad_key"
 msgstr "Сервер отвечает, но ключ не принят (401)."
 

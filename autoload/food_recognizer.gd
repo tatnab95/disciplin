@@ -34,7 +34,7 @@ func test_connection(on_done: Callable, base_url: String = "", model: String = "
 	req.timeout = 30
 	add_child(req)
 	req.request_completed.connect(func(r: int, code: int, _h: PackedStringArray, body: PackedByteArray) -> void:
-		var res := {"ok": code == 200, "http": code}
+		var res := {"ok": code == 200, "http": code, "result": r}
 		if code != 200:
 			var s := body.get_string_from_utf8().strip_edges()
 			if s.length() > 200:
