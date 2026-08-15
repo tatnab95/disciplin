@@ -23,6 +23,7 @@ TimeManager="*res://autoload/time_manager.gd"
 ActivityTracker="*res://autoload/activity_tracker.gd"
 Recommender="*res://autoload/recommender.gd"
 FoodRecognizer="*res://autoload/food_recognizer.gd"
+PhotoPicker="*res://autoload/photo_picker.gd"
 
 [display]
 
@@ -32,10 +33,13 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
 
-
 [internationalization]
 
 locale/translations=PackedStringArray("res://localization/ru.po")
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotGetImage/plugin.cfg")
 
 [rendering]
 

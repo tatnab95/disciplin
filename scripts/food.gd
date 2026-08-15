@@ -36,6 +36,8 @@ func _ready() -> void:
 	back_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
 	title_label.text = tr("menu_food")
 	DataManager.data_changed.connect(_refresh_today)
+	PhotoPicker.picked.connect(_on_photo_selected)
+	PhotoPicker.failed.connect(_on_photo_failed)
 	_build()
 
 
@@ -105,16 +107,22 @@ func _build_add_card() -> PanelContainer:
 	phrow.add_theme_constant_override("separation", 10)
 	var photo := Button.new()
 	photo.text = tr("meal_photo")
-	photo.custom_minimum_size = Vector2(150, 44)
-	photo.pressed.connect(_open_photo_dialog)
+	photo.custom_minimum_size = Vector2(0, 44)
+	photo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	photo.pressed.connect(_pick_gallery)
 	phrow.add_child(photo)
+	var cam := Button.new()
+	cam.text = "📷 Снять фото"
+	cam.custom_minimum_size = Vector2(0, 44)
+	cam.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cam.pressed.connect(_pick_camera)
+	phrow.add_child(cam)
+	vb.add_child(phrow)
 	_ai_status = Label.new()
 	_ai_status.text = tr("meal_hint")
 	_ai_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_ai_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_ai_status.add_theme_color_override("font_color", ThemeManager.text_secondary)
-	phrow.add_child(_ai_status)
-	vb.add_child(phrow)
+	vb.add_child(_ai_status)
 
 	vb.add_child(_title(tr("meal_items")))
 	_pending_box = VBoxContainer.new()
@@ -195,38 +203,24 @@ func _add_catalog_item(fd: Dictionary, grams := 100) -> void:
 # Фото → ИИ
 # ---------------------------------------------------------------------------
 
-func _open_photo_dialog() -> void:
-	var fd := FileDialog.new()
-	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	fd.access = FileDialog.ACCESS_FILESYSTEM
-	fd.filters = PackedStringArray(["*.png, *.jpg, *.jpeg, *.webp ; Изображения"])
-	fd.file_selected.connect(_on_photo_selected)
-	add_child(fd)
-	fd.popup_centered()
+func _pick_gallery() -> void:
+	PhotoPicker.pick()
+
+
+func _pick_camera() -> void:
+	PhotoPicker.capture()
 
 
 func _on_photo_selected(path: String) -> void:
-	var stored := _copy_to_photos(path)
-	if stored.is_empty():
-		_ai_status.text = tr("photo_error")
-		_ai_status.add_theme_color_override("font_color", ThemeManager.danger)
-		return
-	_photo_path = stored
+	_photo_path = path
 	_ai_status.text = tr("ai_thinking")
 	_ai_status.remove_theme_color_override("font_color")
-	FoodRecognizer.recognize_image(stored, _on_ai_result)
+	FoodRecognizer.recognize_image(path, _on_ai_result)
 
 
-func _copy_to_photos(src: String) -> String:
-	var img: Image = Image.load_from_file(src)
-	if img == null:
-		return ""
-	var dst := "user://photos/%d.jpg" % Time.get_unix_time_from_system()
-	var f := FileAccess.open(dst, FileAccess.WRITE)
-	if f == null:
-		return ""
-	f.store_buffer(img.save_jpg_to_buffer(0.85))
-	return dst
+func _on_photo_failed(_message: String) -> void:
+	_ai_status.text = tr("photo_error")
+	_ai_status.add_theme_color_override("font_color", ThemeManager.danger)
 
 
 func _on_ai_result(result: Dictionary) -> void:

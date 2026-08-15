@@ -48,6 +48,8 @@ func _ready() -> void:
 	move_child(bg, 0)
 	DataManager.data_changed.connect(_refresh)
 	menu_btn.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn"))
+	PhotoPicker.picked.connect(_on_ai_photo_selected)
+	PhotoPicker.failed.connect(func(_m: String) -> void: _show_ai_popup(tr("photo_error"), ThemeManager.danger))
 	_build_all()
 
 
@@ -127,40 +129,17 @@ func _assistant_card() -> PanelContainer:
 func _on_ask_ai() -> void:
 	if _ai_processing:
 		return
-	var fd := FileDialog.new()
-	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	fd.access = FileDialog.ACCESS_FILESYSTEM
-	fd.filters = PackedStringArray(["*.png, *.jpg, *.jpeg, *.webp ; Изображения"])
-	fd.file_selected.connect(_on_ai_photo_selected)
-	add_child(fd)
-	fd.popup_centered()
+	PhotoPicker.pick()
 
 
 func _on_ai_photo_selected(path: String) -> void:
 	_ai_processing = true
-	var stored := _copy_photo(path)
-	if stored.is_empty():
-		_ai_processing = false
-		_show_ai_popup(tr("photo_error"), ThemeManager.danger)
-		return
 	_show_ai_popup(tr("ai_thinking"), ThemeManager.text_secondary)
 	if not FoodRecognizer.is_configured():
 		_ai_processing = false
 		_show_ai_popup(_random_fun(), ThemeManager.text)
 		return
-	FoodRecognizer.ask_vision(stored, AI_ASK_PROMPT, _on_ask_result)
-
-
-func _copy_photo(src: String) -> String:
-	var img: Image = Image.load_from_file(src)
-	if img == null:
-		return ""
-	var dst := "user://photos/%d.jpg" % Time.get_unix_time_from_system()
-	var f := FileAccess.open(dst, FileAccess.WRITE)
-	if f == null:
-		return ""
-	f.store_buffer(img.save_jpg_to_buffer(0.85))
-	return dst
+	FoodRecognizer.ask_vision(path, AI_ASK_PROMPT, _on_ask_result)
 
 
 func _on_ask_result(result: Dictionary) -> void:
